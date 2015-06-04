@@ -6,17 +6,18 @@
   with_items: typo3.cms.sites.keys()
   tags: typo3-cms-sites
 
-- name: Add composer.json
-  sudo: www-data
-  template: src=cms/composer.json dest={{ typo3_webroot }}{{ item.key }}/composer.json
-  with_dict: typo3.cms.sites
-  tags: typo3-cms-composer
-
-- name: Composer install
-  sudo: www-data
-  composer: command=install working_dir={{ typo3_webroot }}{{ item.key }}
-  with_dict: typo3.cms.sites
-  tags: typo3-cms-composer
+# @todo clone application
+# - name: Add composer.json
+#   sudo: www-data
+#   template: src=cms/composer.json dest={{ typo3_webroot }}{{ item.key }}/composer.json
+#   with_dict: typo3.cms.sites
+#   tags: typo3-cms-composer
+#
+# - name: Composer install
+#   sudo: www-data
+#   composer: command=install working_dir={{ typo3_webroot }}{{ item.key }}
+#   with_dict: typo3.cms.sites
+#   tags: typo3-cms-composer
 
 - name: typo3_console installation of TYPO3
   sudo: www-data

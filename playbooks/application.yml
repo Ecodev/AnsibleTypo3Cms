@@ -11,6 +11,7 @@
           sites:
             media.fabarea.tk:
                 database_password: mediafabareatk
+                git: https://github.com/Ecodev/typo3-cms-speciality-distribution.git
           extensions:
             enabled:
               - scheduler
