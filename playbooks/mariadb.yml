@@ -1,0 +1,6 @@
+# Ansible playbook to set up mariadb
+---
+- hosts: all
+  user: root
+  roles:
+    - mariadb

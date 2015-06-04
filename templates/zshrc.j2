@@ -1,0 +1,97 @@
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/.oh-my-zsh
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+#ZSH_THEME="random"
+#sorin candy lukerandall rixius wezm+ bira fletcherm jonathan random robbyrussell steeef
+# pygmalion fino
+
+
+ZSH_THEME="steeef"
+
+# @todo make automatic return
+#ZSH_THEME="agnoster"
+
+HIST_STAMPS="mm/dd/yyyy"
+
+# Set to this to use case-sensitive completion
+# CASE_SENSITIVE="true"
+
+# Comment this out to disable weekly auto-update checks
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment following line if you want to disable colors in ls
+# DISABLE_LS_COLORS="true"
+
+# Uncomment following line if you want to disable autosetting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment following line if you want red dots to be displayed while waiting for completion
+COMPLETION_WAITING_DOTS="true"
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git flow brew knife phing osx autojump composer vagrant docker frontend-search)
+
+# Do not share history between terminal tabs
+setopt nosharehistory
+setopt interactivecomments
+unsetopt correct_all
+
+# Export PATH
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/syno/sbin:/usr/syno/bin:/usr/local/sbin:/usr/local/bin
+export PATH=/opt/bin:/usr/syno/sbin:$PATH
+
+source $ZSH/oh-my-zsh.sh
+
+# Customize to your needs...
+
+#export LANG='en_GB'
+#export LC_CTYPE=''
+#export LC_ALL=en_GB.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export NODE_PATH="/usr/local/lib/node_modules"
+
+# Key binding
+bindkey '\e.' insert-last-word
+
+alias ll='ls -al'
+alias l='ls -l'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+
+alias psw='ping switch.ch'
+alias p8='ping 8.8.8.8'
+
+# GIT
+#export EDITOR='mcedit  --colors "editnormal=default,black:normal=default,black"'
+
+#alias mc="mc --colors normal=default"
+
+alias me='mcedit'
+#alias me='mcedit  --colors "editnormal=default,black:normal=default,black"'
+#alias mcedit='mcedit  --colors "editnormal=default,black:normal=default,black"'
+alias s='screen -x'
+
+# Docker
+#export DOCKER_CERT_PATH=/Users/fudriot/.boot2docker/certs/boot2docker-vm
+#export DOCKER_TLS_VERIFY=1
+
+
+# HELPER
+alias tstamp='date +%s'
+alias t='tstamp'
+
+alias dpi='docker images'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias docker-kill-all='docker kill $(docker ps -a -q)'
+alias docker-pristine='echo "killing..." && docker-kill-all && echo "\ncleaning..." && docker-clean-containers'
+
+# Enter a docker container using the nsenter approach

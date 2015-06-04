@@ -1,0 +1,13 @@
+# Main playbook to deploy everything
+# Run with: ansible-playbook -i hosts bootstrap.yml
+---
+- hosts: all
+
+
+- include: playbooks/base.yml
+- include: playbooks/users.yml
+- include: playbooks/mariadb.yml
+- include: playbooks/php-fpm.yml
+- include: playbooks/php-extra.yml
+- include: playbooks/application.yml
+- include: playbooks/nginx.yml

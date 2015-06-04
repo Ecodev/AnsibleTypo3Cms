@@ -1,0 +1,6 @@
+# Ansible playbook to set up php-fpm
+---
+- hosts: all
+  user: root
+  roles:
+    - php-extra

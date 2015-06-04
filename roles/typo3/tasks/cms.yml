@@ -1,0 +1,87 @@
+---
+
+- name: Setup TYPO3 CMS site directories
+  sudo: www-data
+  file: path={{ typo3_webroot }}{{ item }} state=directory mode=0775
+  with_items: typo3.cms.sites.keys()
+  tags: typo3-cms-sites
+
+- name: Add composer.json
+  sudo: www-data
+  template: src=cms/composer.json dest={{ typo3_webroot }}{{ item.key }}/composer.json
+  with_dict: typo3.cms.sites
+  tags: typo3-cms-composer
+
+- name: Composer install
+  sudo: www-data
+  composer: command=install working_dir={{ typo3_webroot }}{{ item.key }}
+  with_dict: typo3.cms.sites
+  tags: typo3-cms-composer
+
+- name: typo3_console installation of TYPO3
+  sudo: www-data
+  shell: if [ ! -f {{ typo3_webroot }}{{ item.key }}/typo3conf/LocalConfiguration.php ]; then {{ typo3_webroot }}{{ item.key }}/typo3cms install:setup --non-interactive --database-user-name={{ item.key | regex_replace('\\.', '') }} --database-user-password="{{ item.value.database_password }}" --database-host-name=localhost --database-port=3306 --database-name={{ item.key | regex_replace('\\.', '') }} --database-create=0 --admin-user-name=admin --admin-password="password" --site-name="TYPO3 CMS"; fi
+  with_dict: typo3.cms.sites
+  tags: typo3-cms-composer
+
+- name: Flushing Caches
+  sudo: www-data
+  command: rm -rf {{ typo3_webroot }}{{ item.key }}/typo3temp/Cache
+  with_dict: typo3.cms.sites
+  tags: typo3-cms-composer
+#
+- name: typo3_console cache warmup
+  sudo: www-data
+  command: "{{ typo3_webroot }}{{ item.key }}/typo3cms cache:warmup"
+  when: item.key | match('^((6|7)\\.(\d)|dev-master)\\.')
+  with_dict: typo3.cms.sites
+  tags: typo3-cms-composer
+
+- name: typo3_console install extension accountmanagement
+  sudo: www-data
+  command: "{{ typo3_webroot }}{{ item.key }}/typo3cms extension:install accountmanagement"
+  with_dict: typo3.cms.sites
+
+# @todo add test if user exist
+#- name: typo3_console create _cli_scheduler user
+#  sudo: www-data
+#  command: "{{ typo3_webroot }}{{ item.key }}/typo3cms user:create --username _cli_scheduler"
+#  with_dict: typo3.cms.sites
+#  ignore_errors: yes
+#
+- name: typo3_console install extensions
+  sudo: www-data
+  command: "{{ typo3_webroot }}{{ item[0] }}/typo3cms extension:install {{ item[1] }}"
+  when: typo3.cms.extensions.enabled is defined
+  with_nested:
+    - typo3.cms.sites.keys()
+    - typo3.cms.extensions.enabled
+
+- name: typo3_console uninstall extensions
+  sudo: www-data
+  command: "{{ typo3_webroot }}{{ item[0] }}/typo3cms extension:uninstall {{ item[1] }}"
+  when: typo3.cms.extensions.disabled is defined
+  with_nested:
+    - typo3.cms.sites.keys()
+    - typo3.cms.extensions.disabled
+
+# - name: Enable install tool for CMS Sources
+#   sudo: www-data
+#   file: path={{ typo3_webroot }}{{ item.key }}/typo3conf/ENABLE_INSTALL_TOOL state=touch mode=0664
+#   with_dict: typo3.cms.sites
+#   tags: typo3-cms-installtool
+#
+# - name: Create ramdisk directories to offload typo3temp to ramdisk
+#   file: path=/mnt/typo3cache/{{ item }} state=directory owner={{nginx_user}} group={{nginx_group}} mode=0775
+#   with_items: typo3.cms.sites.keys()
+#   tags: typo3-cms-ramdisk
+#
+# - name: Make fstab entries for TYPO3 CMS typo3temp
+#   mount: src=/mnt/typo3cache/{{ item }} name={{ typo3_webroot }}{{ item }}/typo3temp/ fstype=none opts=bind,noauto state=present
+#   with_items: typo3.cms.sites.keys()
+#   tags: typo3-cms-ramdisk
+#
+# - name: Mount bind TYPO3 CMS typo3temp ramdisks
+#   shell: if ! mountpoint -q "{{ typo3_webroot }}{{ item }}/typo3temp"; then mount "/mnt/typo3cache/{{ item }}"; fi
+#   with_items: typo3.cms.sites.keys()
+#   tags: typo3-cms-ramdisk

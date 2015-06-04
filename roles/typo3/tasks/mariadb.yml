@@ -1,0 +1,14 @@
+---
+
+- name: Create CMS databases
+  mysql_db: name={{ item.key | regex_replace('\\.', '') }}
+            state=present
+            encoding='utf8'
+  with_dict: typo3.cms.sites
+
+- name: Grant CMS database privileges
+  mysql_user: name={{ item.key | regex_replace('\\.', '') }}
+              password={{ item.value.database_password }}
+              priv={{ item.key | regex_replace('\\.', '') }}.*:ALL
+              append_privs=yes
+  with_dict: typo3.cms.sites

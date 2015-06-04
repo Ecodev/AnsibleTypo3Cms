@@ -1,0 +1,14 @@
+# PyCharm stuff...
+.idea
+
+# Mac OS X stuff...
+.DS_Store
+
+# Sublime stuff
+*.sublime-project
+*.sublime-workspace
+
+# Project stuff
+roles/composer
+roles/nginx
+roles/php-fpm

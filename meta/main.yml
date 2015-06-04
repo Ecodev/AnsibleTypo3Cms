@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Fabien Udriot
+  description: TYPO3 CMS install
+  company: MaxServ
+  license: license GPLv3
+  min_ansible_version: 1.2
+  platforms:
+  - name: Ubuntu
+    versions:
+      - trusty
+  categories:
+    - web
+dependencies:
+  - { role: tersmitten.composer }
+  - { role: nbz4live.php-fpm }
+  - { role: jdauphant.nginx }
+  - { role: laggyluke.nodejs }

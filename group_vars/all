@@ -1,0 +1,11 @@
+---
+users:
+  - username: fudriot
+    name: Fabien Udriot
+    email: fabien@ecodev.ch
+    groups: sudo,www-data
+    shell: /bin/zsh
+    github: fabarea
+
+database_name: media
+database_username: media

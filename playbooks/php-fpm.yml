@@ -1,0 +1,44 @@
+# Ansible playbook to set up php-fpm
+---
+- hosts: all
+  user: root
+  roles:
+    - role: php-fpm
+      php_fpm_pool_defaults:
+        chdir: /
+        user: www-data
+        group: www-data
+        listen.owner: www-data
+        listen.group: www-data
+        pm: dynamic
+        pm.max_children: 5
+        pm.start_servers: 2
+        pm.min_spare_servers: 1
+        pm.max_spare_servers: 3
+
+      php_fpm_pools:
+        - name: default
+          listen: "/var/run/php5-fpm.sock"
+
+      php_fpm_ini:
+        - option: "engine"
+          section: "PHP"
+          value: "1"
+        - option: "error_reporting"
+          section: "PHP"
+          value: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+        - option: "date.timezone"
+          section: "PHP"
+          value: "Europe/Zurich"
+        - option: "max_execution_time"
+          section: "PHP"
+          value: 240
+        - option: "upload_max_filesize"
+          section: "PHP"
+          value: "20M"
+        - option: "post_max_size"
+          section: "PHP"
+          value: "20M"
+        - option: "pdo_mysql.cache_size"
+          section: "Pdo_mysql"
+          value: "2000"

@@ -1,0 +1,16 @@
+# Ansible playbook to set up the application
+---
+- hosts: all
+  vars:
+    composer_self_update: true
+  roles:
+    - composer
+    - role: typo3
+      typo3:
+        cms:
+          sites:
+            media.fabarea.tk:
+                database_password: mediafabareatk
+          extensions:
+            enabled:
+              - scheduler
